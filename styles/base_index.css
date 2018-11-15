@@ -1,0 +1,38 @@
+.mensagens{
+    border-bottom:1px solid #ccc;
+    padding-top:5px;
+    padding-bottom:5px;
+}
+#msg{
+    background: rgba(200,240,240,0.7);
+}
+pre{
+    background:white !important;
+}
+#btnSair{
+    cursor:pointer;
+}
+.data-msg{
+    font-size:12px;
+}
+pre{
+    border:0;
+    font:16px "Arial";
+    padding:0;
+    line-height: 25px;
+}
+.imagens{
+    max-width: 50%;
+    max-height: 50%;
+    display: block;
+    border:1px solid #ccc;
+}
+#btnEnviar{
+    background:  #00aba9 !important;
+    border:0 !important;
+    border-radius: 0 !important;
+    padding-top:30px !important;
+    padding-bottom:30px;
+    font-size:18px;
+    margin-left:15px;
+}
