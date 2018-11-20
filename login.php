@@ -88,12 +88,13 @@ if (isset($_SESSION['CONECTADO'])) {
                     } else if (data == '1') {
 
                         var url = new URL(window.location.href);
+                        
                         var c = url.searchParams.get("next");
 
                         if (c == null) {
-                            window.location.href = "./discussoes.php";
+                            window.location.href = "./";
                         } else {
-                            window.location.href = "../discussoes.php" + c;
+                            window.location.href = "./" + c;
                         }
                     }
                 },

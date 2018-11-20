@@ -11,7 +11,7 @@ class Discussao {
 
     public function getDados() {
         try {
-            $sth = $this->conexao->prepare('SELECT * FROM ' . $this->table_name);
+            $sth = $this->conexao->prepare('SELECT * FROM ' . $this->table_name. ' ORDER BY dis_id DESC;');
             $sth->execute();
             return $sth;
         } catch (Exception $exc) {

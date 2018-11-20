@@ -35,7 +35,7 @@ $obj = $Usuario->getDataFromUsers(USER_ID);
                 </a>
                 <div class="nav-collapse collapse">
                     <ul class="nav">
-                        <li><a href="./" title="Clique para voltar">If</a></li>
+                        <li><a href="./" title="Clique para voltar"><?php echo APP_NAME; ?></a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
                 <div class="nav-collapse collapse pull-right">

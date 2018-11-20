@@ -1,3 +1,11 @@
+/**
+ * Descrição:
+ * 
+ * 
+ * 
+ * Desenvolvido por Taffarel Xavier.
+ * <p style="font:bold 16px arial;">taffarel_deus@hotmail.com</p>
+ */
 $(document).ready(function () {
 
     var btnEnviar = $('#btnEnviar'),
@@ -30,28 +38,66 @@ $(document).ready(function () {
     rolarDown();
 
     //Atualiza os dados na hora do load
-    $.get("views/view.get_messages.php", {
+    $.get("../views/view.get_messages.php", {
         discussao_id: _discussao
     }, function (d) {
         getMensagens(d);
     });
 
     var cores = [
-        '#99b433', '#00a300', '#1e7145', '#ff0097', '#7e3878', '#ee1111',
+        '#99b433', '#00a300', '#1e7145', '#ff0097', '#7e3878', '#ee1111', '#2B70AD',
         '#1d1d1d', '#00aba9', '#2d89ef', '#2b5797', '#ffc40d', '#e3a21a', '#da532c'
     ];
+    //Rolagem e mostra o botão
+    $("#resultado").scroll(function (ev) {
+        var scroll = $(this).scrollTop();
+        if (scroll >= 150) {
+            $('#goParaTopo').slideDown();
+        } else {
+            $('#goParaTopo').slideUp();
+        }
+    });
+
+    function swipe(largeImage) {
+        $(largeImage).css({display: 'block',
+            width: 200 + "px",
+            height: 200 + "px"
+        });
+        var url = $(largeImage).attr('src');
+
+        var newWind = window.open('_top');
+        newWind.document.write("<img src='" + url + "' />");
+        newWind.document.title = "Visualização de Imagem";
+    }
 
     function getMensagens(_data) {
 
-        var obj = JSON.parse(_data), str = "", k = 0;
+        var obj = JSON.parse(_data), str = "", k = 0,
+                dt = new Date(),
+                dtRest = dt.getHours() + ':' + dt.getMinutes(),
+                mensagemPadrao = "Esta é uma mensagem fixa";
+
+        str += '<div class="row-fluid">' +
+                '<div class="mensagens">' +
+                '<p>' +
+                '<b style="color:' + cores[6] + ' ">Usuário padrão.</b></p>' +
+                '<p><pre>' +
+                mensagemPadrao
+                + '</pre></p>' +
+                '<label class="text-info data-msg" title="' +
+                dt.getDate() + "-" + (dt.getMonth() + 1) + '-' +
+                dt.getFullYear() + '">' + dtRest + '</label>' +
+                '<hr class="msg-hr"/></div>' +
+                '</div>';
+
 
         $.each(obj, function (index, value) {
             //console.log(value);
-            var dt = new Date(value.men_data * 1000),
+            dt = new Date(value.men_data * 1000),
                     dtRest = dt.getHours() + ':' + dt.getMinutes(),
                     img = "", _rand = parseInt(Math.random() * (cores.length - 0) + 0);
             if (value.men_tipo == 'image') {
-                img += "<a><img src='" + value.men_image + "' class='imagens img-responsive'  /></a>";
+                img += "<a><img src='" + value.men_image + "' class='msg-imagens img-responsive'  /></a>";
             }
 
             while (k < cores.length) {
@@ -60,19 +106,35 @@ $(document).ready(function () {
 
             str += '<div class="row-fluid">' +
                     '<div class="mensagens">' +
-                    '<p><img src="img/avatar.png" />' +
+                    '<p>' +
                     '<b style="color:' + cores[_rand] + ' ">&nbsp;<i>' + value.nome + '</i></b></p>' +
                     '<p><pre>' + value.men_mensagens + '</pre></p>' +
                     img +
                     '<label class="text-info data-msg" title="' +
                     dt.getDate() + "-" + (dt.getMonth() + 1) + '-' +
                     dt.getFullYear() + '">' + dtRest + '</label>' +
-                    '</div>' +
+                    '<hr class="msg-hr"/></div>' +
                     '</div>';
         });
         $('#resultado').html(str);
+
+        /*ABRIR IMAGENS*/
+        $(".msg-imagens").click(function () {
+            var self = $(this);
+            /*$('#getImagemSelected').attr('src', self.attr('src'));
+             $('#modalAbrirImagens').modal('show');*/
+            swipe(self);
+        });
         //console.clear();
     }
+
+    $('#goParaTopo').click(function () {
+        var _self = $(this);
+        _self.slideUp();
+        $("#resultado").animate({scrollTop:
+                    parseInt(0)}, 500);
+
+    });
 
     //Paste from clipboard
     document.getElementById('msg').onpaste = function (event) {
@@ -114,7 +176,7 @@ $(document).ready(function () {
     //Long Polling
     $(this).LongPolling({
         nomeDaVariavelLocalStorage: "dados",
-        url: "views/view.get_messages.php",
+        url: "../views/view.get_messages.php",
         tempoCarregamento: 1000,
         metodo: "POST",
         dataHttp: {discussao_id: _discussao},
@@ -141,7 +203,7 @@ $(document).ready(function () {
     });
 
     formEnviar.ajaxForm({
-        url: 'modelos/model.mensagens.php',
+        url: '../modelos/model.mensagens.php',
         beforeSend: function () {
             btnEnviar.html("Enviando, aguarde, por favor.").attr("disabled", true);
         },
@@ -150,7 +212,7 @@ $(document).ready(function () {
         },
         success: function (data) {
             if (data == '1') {
-                btnEnviar.html("Enviar").attr("disabled", false);
+                btnEnviar.html("<i class='fa fa-paper-plane fa-2x' aria-hidden='true'></i>").attr("disabled", false);
                 editor.val('').focus();
                 rolarDown();
                 $('#pastedImage').hide();
