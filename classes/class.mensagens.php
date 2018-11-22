@@ -25,6 +25,30 @@ class Mensagens {
             echo $exc->getMessage();
         }
     }
+    
+    public function get_arquivos_from_mensagem_id($discussao_kfid) {
+        try {
+            $sth = $this->conexao->prepare('SELECT * FROM ' .
+                    $this->table_name . ' WHERE men_discussao_fk_id = ?');
+            $sth->bindParam(1, $discussao_kfid, PDO::PARAM_INT);
+            $sth->execute();
+            return $sth;
+        } catch (Exception $exc) {
+            echo $exc->getMessage();
+        }
+    }
+
+    public function get_lasta_id() {
+        try {
+            $sth = $this->conexao->prepare('SELECT men_id FROM ' .
+                    $this->table_name . ' ORDER BY men_id DESC LIMIT 1');
+             $sth->execute();
+             $data = $sth->fetch(PDO::FETCH_OBJ);
+            return (int) $data->men_id;
+        } catch (Exception $exc) {
+            echo $exc->getMessage();
+        }
+    }
 
     /**
      * 

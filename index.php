@@ -14,7 +14,7 @@ if (!isset($_SESSION['CONECTADO'])) {
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
         <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
         <link href='https://fonts.googleapis.com/css?family=ABeeZee' rel='stylesheet'>
-        <!--<link href="bootstrap/css/font-awesome.css" rel="stylesheet" />-->
+        <link href="bootstrap/fontawesome/css/all.min.css" rel="stylesheet" />
         <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
         <style>
             body {
@@ -36,9 +36,13 @@ if (!isset($_SESSION['CONECTADO'])) {
                             <li><a href="./" title="Clique para voltar"><?php echo APP_NAME; ?></a></li>
                         </ul>
                         <ul class="nav pull-right">
-                            <li><a href="funcoes/funcao.sair.php" class="text-error"
-                                   style="color:red;"
-                                   title="#">Sair</a></li>
+                            <li>
+                                <a id="btnSair" href="funcoes/funcao.sair.php" title="Clique para Sair" class="text-error pull-right">
+                                    <i class="fas fa-sign-out-alt"></i> <!-- uses solid style -->
+                                    <span class="hidden-phone hidden-tablet">Sair</span>
+                                </a>
+                            </li>
+
                         </ul>
                     </div>
                 </div>

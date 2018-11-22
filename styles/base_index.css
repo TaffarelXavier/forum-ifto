@@ -25,10 +25,17 @@
     .container{
         position:fixed;width: 90%;right: 5%;left:5%;overflow: hidden;
     }
-     #goParaTopo{
+    #goParaTopo{
         width: 50px;
         right: 6%; 
     }  
+    #btnAnexarArquivos{
+        right: 21%;
+    }
+    .msg-imagens{
+        max-width: 15% !important;
+        max-height: 14% !important; 
+    }
 }
 
 /* tables em formato porta retrato até os desktos no formato paisagem */
@@ -39,10 +46,13 @@
     #goParaTopo{
         width: 10%;
         right: 6%; 
-    }   
+    } 
+    #btnAnexarArquivos{
+        right: 21%;
+    }
 }
 .fa-angle-double-up {
-  color: #2B70AD;
+    color: #2B70AD;
 }
 /* dispositivo em paisagem até os tablets em formato porta-retrato */
 @media (max-width: 767px) {
@@ -56,10 +66,28 @@
         width: 5%;
         right: 10%;
     }  
+    #btnAnexarArquivos{
+        right: 23%;
+    }
+     .msg-imagens{
+        max-width: 20% !important;
+        max-height: 20% !important; 
+    }
+}
+/* dispositivo no formato paisagem e abaixos celulares: retrato */
+@media (max-width: 480px) {
+    #btnAnexarArquivos{
+        right: 23%;
+    }
+    .msg-imagens{
+        max-width: 25% !important;
+        max-height: 24% !important; 
+    }
 }
 #painel-editor{
     position: relative;
 }
+
 #resultado{
     position: fixed;
     overflow:hidden;
@@ -78,8 +106,7 @@
     position: fixed;padding:0px !important;
     width: 90%;right: 5%;left:5%;bottom:0px !important;border:0px solid red;margin:0px !important;
 }
-/* dispositivo no formato paisagem e abaixos */
-@media (max-width: 480px) {  }
+
 
 .mensagens{
     padding-top:5px;
@@ -103,6 +130,8 @@
     max-height: 400px;
     border-radius: 0 !important ;min-height: 80px;border:0px solid lime;
     background:#3B3F43;
+    border-width:0px !important;
+    outline: 0;
 }
 pre{
     background:transparent !important;
@@ -122,11 +151,11 @@ pre{
 }
 
 .msg-imagens{
-    max-width: 50%;
-    max-height: 50%;
-    display: block;
+    display: inline;
     border:1px solid #ccc;
+    box-shadow: 0px 0px 7px 0px rgba(0,0,0,0.7);
     cursor:pointer;
+    margin-left:2px;
 }
 
 #btnEnviar{
@@ -134,7 +163,7 @@ pre{
     border:0 !important;
     border-radius: 0 !important;
     padding-top:20px !important;
-    padding-bottom:23px;
+    padding-bottom:24px;
     font-size:18px;
     margin-left:15px;
     text-shadow: 0px 0px transparent;
@@ -144,4 +173,20 @@ pre{
     outline: 0;
     box-shadow: 0px 0px 0px 0px transparent !important;
     border-left: 1px solid #484848 !important;
+}
+
+#btnAnexarArquivos{
+    background:  transparent !important;
+    border:0 !important;
+    border-radius: 0 !important;
+    font-size:18px;
+    margin-left:15px;
+    text-shadow: 0px 0px transparent;
+    color:#FFFFFF;
+    margin:0px !important;
+    position: absolute;
+    outline: 0;
+    box-shadow: 0px 0px 0px 0px transparent !important;
+    bottom:-59px;
+    padding:0px !important;
 }

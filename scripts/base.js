@@ -16,6 +16,7 @@ $(document).ready(function () {
 
     var _discussao = parseInt(url.searchParams.get("discussao"));
 
+    /*Evento para quando clicar em enviar a mensagem*/
     btnEnviar.click(function () {
         if (editor.val().trim().length > 0) {
             formEnviar.submit();
@@ -92,25 +93,41 @@ $(document).ready(function () {
 
 
         $.each(obj, function (index, value) {
-            //console.log(value);
+
             dt = new Date(value.men_data * 1000),
                     dtRest = dt.getHours() + ':' + dt.getMinutes(),
                     img = "", _rand = parseInt(Math.random() * (cores.length - 0) + 0);
-            if (value.men_tipo == 'image') {
-                img += "<a><img src='" + value.men_image + "' class='msg-imagens img-responsive'  /></a>";
+
+            //Verifica o tipo das mensagens:
+
+            switch (value.men_tipo) {
+                case "image":
+                    img += "<a><img src='" + value.men_image + "' class='msg-imagens img-responsive'  /></a>";
+                    break;
+                case "arquivos":
+                    if (value.imagens) {
+                        if (value.imagens.length > 0) {
+                            for (var im = 0; im < value.imagens.length; im++) {
+                                img += "<a><img src='../uploads/" + value.imagens[im].arq_file_md5 +
+                                        "' class='msg-imagens img-responsive'  /></a>";
+                            }
+                        }
+                    }
+                    break;
             }
 
             while (k < cores.length) {
+
                 k++;
             }
 
             str += '<div class="row-fluid">' +
                     '<div class="mensagens">' +
                     '<p>' +
-                    '<b style="color:' + cores[_rand] + ' ">&nbsp;<i>' + value.nome + '</i></b></p>' +
+                    '<b style="color:' + cores[0] + ' ">&nbsp;<i>' + value.nome + '</i></b></p>' +
                     '<p><pre>' + value.men_mensagens + '</pre></p>' +
                     img +
-                    '<label class="text-info data-msg" title="' +
+                    '<div class="clearfix"></div><label class="text-info data-msg" title="' +
                     dt.getDate() + "-" + (dt.getMonth() + 1) + '-' +
                     dt.getFullYear() + '">' + dtRest + '</label>' +
                     '<hr class="msg-hr"/></div>' +
@@ -188,7 +205,7 @@ $(document).ready(function () {
 
     editor.keyup(function (evt) {
         var _this = $(this);
-        if (evt.keyCode == 13 && !evt.shiftKey) {
+        if (evt.keyCode == 13 && (evt.shiftKey | evt.ctrlKey)) {
             if (_this.val().trim().length > 0) {
                 formEnviar.submit();
             } else {
@@ -202,10 +219,35 @@ $(document).ready(function () {
         }
     });
 
+    $(this).keyup(function (ev) {
+
+        if (ev.altKey && ev.keyCode == 73) {
+            document.getElementById('anexarArquivos').click();
+        }
+    });
+
     formEnviar.ajaxForm({
         url: '../modelos/model.mensagens.php',
+
         beforeSend: function () {
-            btnEnviar.html("Enviando, aguarde, por favor.").attr("disabled", true);
+
+            if (document.getElementById('upload_imagem')) {
+
+                /*ENVIAR ARQUIVOS*/
+//                var _t = $('.img-upload-imagem');
+//
+//                var _files = [];
+//
+//                $.each(_t, function (ev, item) {
+//                    _files.push($(item).attr("src"));
+//                });
+//                
+//                _files.forEach(function (image, i) {
+//                    _formData.append('image_' + i, image);
+//                });
+
+            }
+            btnEnviar.html('<i class="fa fa-spinner fa-spin  fa-2x"></i>').attr("disabled", true);
         },
         uploadProgress: function (event, position, total, percentComplete) {
 
@@ -215,13 +257,14 @@ $(document).ready(function () {
                 btnEnviar.html("<i class='fa fa-paper-plane fa-2x' aria-hidden='true'></i>").attr("disabled", false);
                 editor.val('').focus();
                 rolarDown();
-                $('#pastedImage').hide();
+                $('#pastedImage, #gerResultImagesUploaded').hide();
                 btnClosePreviewImg.hide();
                 $('#msg_tipo').val('text');
             } else if (data == '2') {
                 alert('Não foi possível fazer a alteração.');
             } else {
                 alert('Houve um erro. Tente novamente.' + "\nCódigo do erro:" + data);
+                btnEnviar.html("<i class='fa fa-paper-plane fa-2x' aria-hidden='true'></i>").attr("disabled", false);
             }
         },
         complete: function (xhr) {
@@ -235,5 +278,56 @@ $(document).ready(function () {
             window.location.href = "login";
         });
         //}
+    });
+
+    $("#btnAnexarArquivos").click(function () {
+
+    });
+
+    var names = [], ids = [], formUploaded = $("#formUploadFiles");
+
+    $('#anexarArquivos').change(function () {
+
+        $('#displayImagensAnexos').css({height: 'auto'}).show();
+
+        var elem = document.getElementById("anexarArquivos");
+
+        var novoFiles = "";
+
+        for (var k = 0; k < elem.files.length; ++k) {
+
+            names.push(elem.files[k].name);
+
+            console.log(elem.files[k].size);
+
+            console.log(elem.files[k].type);
+
+            console.log(elem.files[k].name);
+
+            ids.push('file_' + k);
+
+            formUploaded.submit();
+
+        }
+        $("#mostrarArquivos").html(novoFiles);
+    });
+
+
+    $("#btnDefinirPropt").click(function () {
+    });
+
+    formUploaded.ajaxForm({
+        beforeSend: function () {
+
+        },
+        uploadProgress: function (event, position, total, percentComplete) {
+
+        },
+        success: function (data) {
+            $('#gerResultImagesUploaded').html(data);
+        },
+        complete: function (xhr) {
+
+        }
     });
 });

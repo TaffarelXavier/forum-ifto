@@ -19,6 +19,7 @@ if (isset($_SESSION['CONECTADO'])) {
         <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" />
         <!--<link href="bootstrap/css/font-awesome.css" rel="stylesheet" />-->
         <link href="styles/builder.min.css" rel="stylesheet" />
+        <link rel="shortcut icon" type="image/png" href="/favicon.png"/>
         <style type="text/css">
             body {
                 padding-top: 40px;

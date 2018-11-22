@@ -11,9 +11,45 @@ class Discussao {
 
     public function getDados() {
         try {
-            $sth = $this->conexao->prepare('SELECT * FROM ' . $this->table_name. ' ORDER BY dis_id DESC;');
+            $sth = $this->conexao->prepare('SELECT * FROM ' . $this->table_name . ' ORDER BY dis_id DESC;');
             $sth->execute();
             return $sth;
+        } catch (Exception $exc) {
+            echo $exc->getMessage();
+        }
+    }
+
+    /**
+     * 
+     * @param type $discussao_id
+     * @return type
+     */
+    public function is_discussao_existe($discussao_id) {
+        try {
+            $sth = $this->conexao->prepare('SELECT COUNT(*) as count_total FROM `' . $this->table_name . '` WHERE dis_id = ?;');
+            $sth->bindParam(1, $discussao_id, PDO::PARAM_INT);
+            $sth->execute();
+            $info = $sth->fetch(PDO::FETCH_OBJ);
+            return (int) $info->count_total;
+        } catch (Exception $exc) {
+            echo $exc->getMessage();
+        }
+    }
+
+    /**
+     * 
+     * @param type $discussao_id
+     * @return type
+     */
+    public function get_discussao_por_id($discussao_id) {
+        try {
+            $sth = $this->conexao->prepare('SELECT dis_id,dis_titulo,dis_descricao,dis_data, '
+                    . 'dis_usuario_kf_id, dis_disponibilidade, dis_mensagem_fixa, usu_id, usu_username FROM `' . $this->table_name . '`'
+                    . ' as t1 JOIN usuarios as t2 ON t1.dis_usuario_kf_id = t2.usu_id WHERE t1.dis_id = ?;');
+            $sth->bindParam(1, $discussao_id, PDO::PARAM_INT);
+            $sth->execute();
+            $info = $sth->fetch(PDO::FETCH_OBJ);
+            return $info;
         } catch (Exception $exc) {
             echo $exc->getMessage();
         }

@@ -1,8 +1,9 @@
 <?php
 include 'autoload.php';
 if (!isset($_SESSION['CONECTADO'])) {
-    header("location:login");
+    header("location:../login");
 }
+$Disc = new discussao($connection);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -47,8 +48,8 @@ if (!isset($_SESSION['CONECTADO'])) {
                         <i class="fas fa-user"></i> 
                         <span class="hidden-phone hidden-tablet">Usuário conectado:</span>
                         <a href="../usuarios"><b><?php
-                                echo $ft->usu_username;
-                                ?></b>
+        echo $ft->usu_username;
+        ?></b>
                         </a>
                     </p>
                 </div>
@@ -79,29 +80,51 @@ if (!isset($_SESSION['CONECTADO'])) {
                          display: none;border:1px solid #ccc;" />
                 </div>
                 <form method="POST" id="formEnviarMsg" style="position: relative;margin:0px; padding:0px;">
+                    <!--MOSTRAR ARQUIVOS FEITO UPLOAD-->
+                    <div id="gerResultImagesUploaded" style="position: absolute;border:1px solid transparent;width: 100%;bottom:0px;"></div>
                     <!----->
                     <div style="padding:0px !important;margin:0px !important;width: 80%;float:left;">
                         <!--label error ao enviar mensagem-->
                         <label class="text-error hidden" id="labelError" style="display: none;"></label>
                         <!--EDITOR-->
-                        <textarea class="span12" rows="3"
+                        <textarea class="span12"
                                   autofocus="" id="msg" name="mensagens"
                                   cols="30" placeholder="Digite sua mensagem"></textarea>
+                        <!--BOTÃO PARA ANEXAR ARQUIVOS-->
+                        <label id="btnAnexarArquivos"
+                               for="anexarArquivos"
+                               type="button"><i class="fas fa-paperclip fa-2x"></i></label>
                     </div>
-                    <!----->
-                    <button class="btn span12" type="button" id="btnEnviar" title="Clique para enviar" >
+                    <!--BOTÃO PARA ENVIAR MENSAGEM-->
+                    <button type="button" id="btnEnviar" title="Clique para enviar" >
                         <i class="fa fa-paper-plane fa-2x" aria-hidden="true"></i></button>
 
-                    <input type="hidden" id="edit_imagem" name="edit_imagem" />
-                    <input type="hidden" id="msg_tipo" value="text" name="msg_tipo" />
-                    <input type="hidden" value="inserir" name="acao" />
                     <?php
                     $discussao_fkid = val_input::val_int('discussao');
                     ?>
+                    <div id="getFilesUploaded"></div>
                     <input type="hidden" value="<?php echo $discussao_fkid; ?>" name="discussao_fkid" />
                     <input type="hidden" value="<?php echo USER_ID; ?>" name="user_id" />
+                    <input type="hidden" id="edit_imagem" name="edit_imagem" />
+                    <input type="hidden" value="text" id="msg_tipo" name="msg_tipo" />
+                    <input type="hidden" value="inserir" name="acao" />
+
                 </form>
+                <!--style="display: none;" hidden=""-->
+                <!--Upload Múltiplos Arquivos display: none;-->
+                <div class="row-fluid" style="position: absolute;max-width: 100%;height: 0;
+                     bottom:120px;right: 0px;left:0px;z-index: 9999;background: white;
+                     padding:0 !important;background: transparent;" id="displayImagensAnexos">
+                    <form style="padding:0;" id="formUploadFiles"
+                          action="../modelos/model.upload.php"
+                          enctype="multipart/form-data" method="POST">
+                        <!--border:0;width: 0;outline: 0;display: none;;;-->
+                        <div id="mostrarArquivos" style="color:black;"></div>
+                        <input type='file' name='files[]' accesskey="e" multiple="" id="anexarArquivos" style="display: none;" />
+                    </form>
+                </div>
             </div>
+
             <!--
             <hr><footer class="muted">
             <div><small><?php echo APP_NAME; ?> &copy; </small></div>
